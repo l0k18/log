@@ -9,9 +9,9 @@ import (
 	"runtime"
 	"strings"
 	"time"
-	
-	gt "github.com/buger/goterm"
+
 	"github.com/davecgh/go-spew/spew"
+	gt "github.com/p9c/goterm"
 )
 
 var L = Empty()
@@ -137,7 +137,7 @@ func Empty() *Logger {
 		Tracec: NoClosure(),
 		Writer: wr,
 	}
-	
+
 }
 
 // sanitizeLoglevel accepts a string and returns a
