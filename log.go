@@ -137,18 +137,21 @@ func Composite(text, level string, color bool, split string) string {
 		dots = ""
 	case terminalWidth <= 80:
 		dots = " "
-		if len(file) > 40 {
+		if len(file) > 30 {
 			file = ""
+			line = ""
 		}
 		since = fmt.Sprintf("%v", time.Now().Sub(StartupTime)/time.Second*time.Second)
 	case terminalWidth < 120:
-		if len(file) > 60 {
+		if len(file) > 40 {
 			file = ""
+			line = ""
 		}
 		since = fmt.Sprintf("%v", time.Now().Sub(StartupTime)/time.Millisecond*time.Millisecond)
 	case terminalWidth < 160:
-		if len(file) > 80 {
+		if len(file) > 60 {
 			file = ""
+			line = ""
 		}
 		since = fmt.Sprint(time.Now())[:19]
 	case terminalWidth >= 200:
