@@ -125,8 +125,7 @@ func Composite(text, level string, color bool, split string) string {
 	_, loc, iline, _ := runtime.Caller(skip)
 	line := fmt.Sprint(iline)
 	files := strings.Split(loc, split)
-	file := loc
-	var since string
+	var file, since string
 	switch {
 	case len(files) > 1 && terminalWidth < 200:
 		file = files[1]
@@ -136,7 +135,7 @@ func Composite(text, level string, color bool, split string) string {
 		since = fmt.Sprint(time.Now())
 	case terminalWidth < 120:
 		if len(files) < 2 {
-			file = loc
+			file = ""
 		} else {
 			file = files[1]
 		}
