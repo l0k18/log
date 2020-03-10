@@ -112,36 +112,39 @@ func (w *LogWriter) Println(a ...interface{}) {
 }
 
 func Composite(text, level string, color bool, split string) string {
+	dots := "."
 	terminalWidth := goterm.Width()
-	sinceW := 12
-	if terminalWidth < 80 {
-		terminalWidth = 80
+	if terminalWidth < 40 {
+		terminalWidth = 40
 	}
 	skip := 2
 	if level == Check {
-		sinceW = 10
 		skip = 3
 	}
 	_, loc, iline, _ := runtime.Caller(skip)
 	line := fmt.Sprint(iline)
 	files := strings.Split(loc, split)
 	var file, since string
-	switch {
-	case len(files) > 1 && terminalWidth < 200:
+	file = loc
+	if len(files) > 1 {
 		file = files[1]
+	}
+	switch {
+	case terminalWidth <= 60:
+		since = ""
+		file = ""
+		line = ""
+		dots = ""
+	case terminalWidth <= 80:
+		dots = " "
+		since = fmt.Sprintf("%v", time.Now().Sub(StartupTime)/time.Second*time.Second)
+	case terminalWidth < 120:
+		since = fmt.Sprintf("%v", time.Now().Sub(StartupTime)/time.Millisecond*time.Millisecond)
+	case terminalWidth < 160:
 		since = fmt.Sprint(time.Now())[:19]
 	case terminalWidth >= 200:
-		file = loc
-		since = fmt.Sprint(time.Now())
-	case terminalWidth < 120:
-		if len(files) < 2 {
-			file = ""
-		} else {
-			file = files[1]
-		}
-		since = fmt.Sprintf("%-"+fmt.Sprint(sinceW)+"s", time.Now().Sub(StartupTime)/time.Second*time.Second)
+		since = fmt.Sprint(time.Now())[:39]
 	default:
-		file = loc
 		since = fmt.Sprint(time.Now())[:19]
 	}
 	levelLen := len(level) + 1
@@ -149,6 +152,9 @@ func Composite(text, level string, color bool, split string) string {
 	textLen := len(text) + 1
 	fileLen := len(file) + 1
 	lineLen := len(line) + 1
+	if file != "" {
+		file += ":"
+	}
 	if color {
 		switch level {
 		case "FTL":
@@ -195,7 +201,7 @@ func Composite(text, level string, color bool, split string) string {
 		line1len := terminalWidth - levelLen - sinceLen - fileLen - lineLen
 		restLen := terminalWidth - levelLen - sinceLen
 		if len(lines) > 1 {
-			final = fmt.Sprintf("%s %s %s %s:%s", level, since,
+			final = fmt.Sprintf("%s %s %s %s%s", level, since,
 				strings.Repeat(" ",
 					terminalWidth-levelLen-sinceLen-fileLen-lineLen),
 				file, line)
@@ -218,8 +224,8 @@ func Composite(text, level string, color bool, split string) string {
 							if spacers < 1 {
 								spacers = 1
 							}
-							final += strings.Repeat(".", spacers)
-							final += fmt.Sprintf(" %s:%s\n",
+							final += strings.Repeat(dots, spacers)
+							final += fmt.Sprintf(" %s%s\n",
 								file, line)
 							final += strings.Repeat(" ", levelLen+sinceLen)
 							final += spaced[i-1] + " "
@@ -231,7 +237,7 @@ func Composite(text, level string, color bool, split string) string {
 						if curLineLen >= restLen-1 {
 							final += "\n" + strings.Repeat(" ",
 								levelLen+sinceLen)
-							final += spaced[i-1] + "."
+							final += spaced[i-1] + dots
 							curLineLen = len(spaced[i-1]) + 1
 						} else {
 							final += spaced[i-1] + " "
@@ -242,16 +248,16 @@ func Composite(text, level string, color bool, split string) string {
 			curLineLen += len(spaced[i])
 			if !rest {
 				if curLineLen >= line1len {
-					final += fmt.Sprintf("%s %s:%s\n",
-						strings.Repeat(".",
+					final += fmt.Sprintf("%s %s%s\n",
+						strings.Repeat(dots,
 							len(spaced[i])+line1len-curLineLen),
 						file, line)
 					final += strings.Repeat(" ", levelLen+sinceLen)
 					final += spaced[i] // + "\n"
 				} else {
-					final += fmt.Sprintf("%s %s %s:%s\n",
+					final += fmt.Sprintf("%s %s %s%s\n",
 						spaced[i],
-						strings.Repeat(".",
+						strings.Repeat(dots,
 							terminalWidth-curLineLen-fileLen-lineLen),
 						file, line)
 				}
@@ -263,8 +269,8 @@ func Composite(text, level string, color bool, split string) string {
 			}
 		}
 	} else {
-		final = fmt.Sprintf("%s %s %s %s %s:%s", level, since, text,
-			strings.Repeat(".",
+		final = fmt.Sprintf("%s %s %s %s %s%s", level, since, text,
+			strings.Repeat(dots,
 				terminalWidth-levelLen-sinceLen-textLen-fileLen-lineLen),
 			file, line)
 	}
