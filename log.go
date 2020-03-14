@@ -42,7 +42,7 @@ func (l *Logger) SetLevel(level string, color bool, split string) *Logger {
 		l.Debug = printlnFunc("DBG", color, l.LogFileHandle, l.LogChan, l.Split)
 		l.Debugf = printfFunc("DBG", color, l.LogFileHandle, l.LogChan, l.Split)
 		l.Debugc = printcFunc("DBG", color, l.LogFileHandle, l.LogChan, l.Split)
-		l.Debugs = ps("TRC", color, l.LogFileHandle, l.Split)
+		l.Debugs = ps("DBG", color, l.LogFileHandle, l.Split)
 		fallen = true
 		fallthrough
 	case level == Check || fallen:
@@ -55,28 +55,28 @@ func (l *Logger) SetLevel(level string, color bool, split string) *Logger {
 		l.Info = printlnFunc("INF", color, l.LogFileHandle, l.LogChan, l.Split)
 		l.Infof = printfFunc("INF", color, l.LogFileHandle, l.LogChan, l.Split)
 		l.Infoc = printcFunc("INF", color, l.LogFileHandle, l.LogChan, l.Split)
-		l.Infos = ps("TRC", color, l.LogFileHandle, l.Split)
+		l.Infos = ps("INF", color, l.LogFileHandle, l.Split)
 		fallen = true
 		fallthrough
 	case level == Warn || fallen:
 		l.Warn = printlnFunc("WRN", color, l.LogFileHandle, l.LogChan, l.Split)
 		l.Warnf = printfFunc("WRN", color, l.LogFileHandle, l.LogChan, l.Split)
 		l.Warnc = printcFunc("WRN", color, l.LogFileHandle, l.LogChan, l.Split)
-		l.Warns = ps("TRC", color, l.LogFileHandle, l.Split)
+		l.Warns = ps("WRN", color, l.LogFileHandle, l.Split)
 		fallen = true
 		fallthrough
 	case level == Error || fallen:
 		l.Error = printlnFunc("ERR", color, l.LogFileHandle, l.LogChan, l.Split)
 		l.Errorf = printfFunc("ERR", color, l.LogFileHandle, l.LogChan, l.Split)
 		l.Errorc = printcFunc("ERR", color, l.LogFileHandle, l.LogChan, l.Split)
-		l.Errors = ps("TRC", color, l.LogFileHandle, l.Split)
+		l.Errors = ps("ERR", color, l.LogFileHandle, l.Split)
 		fallen = true
 		fallthrough
 	case level == Fatal:
 		l.Fatal = printlnFunc("FTL", color, l.LogFileHandle, l.LogChan, l.Split)
 		l.Fatalf = printfFunc("FTL", color, l.LogFileHandle, l.LogChan, l.Split)
 		l.Fatalc = printcFunc("FTL", color, l.LogFileHandle, l.LogChan, l.Split)
-		l.Fatals = ps("TRC", color, l.LogFileHandle, l.Split)
+		l.Fatals = ps("FTL", color, l.LogFileHandle, l.Split)
 		fallen = true
 	}
 	return l
