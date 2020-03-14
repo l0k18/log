@@ -520,7 +520,6 @@ type Logger struct {
 	Check         CheckFunc
 	Debug         PrintlnFunc
 	Trace         PrintlnFunc
-	Traces        SpewFunc
 	Fatalf        PrintfFunc
 	Errorf        PrintfFunc
 	Warnf         PrintfFunc
@@ -535,6 +534,12 @@ type Logger struct {
 	Checkc        CheckFunc
 	Debugc        PrintcFunc
 	Tracec        PrintcFunc
+	Fatals        SpewFunc
+	Errors        SpewFunc
+	Warns         SpewFunc
+	Infos         SpewFunc
+	Debugs        SpewFunc
+	Traces        SpewFunc
 	LogFileHandle *os.File
 	Writer        LogWriter
 	Color         bool
