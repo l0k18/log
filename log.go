@@ -114,8 +114,8 @@ func (w *LogWriter) Println(a ...interface{}) {
 func Composite(text, level string, color bool, split string) string {
 	dots := "."
 	terminalWidth := goterm.Width()
-	if terminalWidth < 40 {
-		terminalWidth = 40
+	if terminalWidth <= 80 {
+		terminalWidth = 80
 	}
 	skip := 2
 	if level == Check {
